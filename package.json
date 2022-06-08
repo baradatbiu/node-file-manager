@@ -2,6 +2,9 @@
   "name": "node-file-manager",
   "version": "1.0.0",
   "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/baradatbiu/node-file-manager.git"
