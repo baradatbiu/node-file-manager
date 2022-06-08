@@ -1,0 +1,11 @@
+{
+  "name": "node-file-manager",
+  "version": "1.0.0",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baradatbiu/node-file-manager.git"
+  },
+  "license": "ISC",
+  "homepage": "https://https://github.com/baradatbiu/node-file-manager#readme"
+}
