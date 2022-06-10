@@ -3,7 +3,7 @@ import { chdir, cwd, stdout } from "process";
 import { ERROR_INVALID_INPUT, ERROR_OUTPUT } from "./constants.js";
 import { list } from "./utils/list.js";
 
-export class Store {
+export class Terminal {
   username = "";
 
   constructor(startDirectory) {
@@ -23,7 +23,13 @@ export class Store {
   }
 
   goUp() {
-    chdir(join(this.currentDirectoty, ".."));
+    try {
+      chdir(join(this.currentDirectoty, ".."));
+
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERROR_OUTPUT);
+    }
   }
 
   async changeDirectory(path) {
@@ -33,14 +39,21 @@ export class Store {
 
     try {
       chdir(newPath);
+
+      this.writeDirectory();
     } catch (error) {
       this.write(ERROR_OUTPUT);
     }
   }
 
   async listDirectory() {
-    await list(this.currentDirectoty);
-    this.write("\n");
+    try {
+      await list(this.currentDirectoty);
+
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERROR_OUTPUT);
+    }
   }
 
   write(message) {
@@ -49,6 +62,7 @@ export class Store {
 
   writeWelcomeText() {
     this.write(`Welcome to the File Manager, ${this.username}!\n\n`);
+    this.writeDirectory();
   }
 
   writeFinishText() {
@@ -60,6 +74,6 @@ export class Store {
   }
 
   writeInputError() {
-    this.write(ERROR_INVALID_INPUT);
+    this.write(`${ERROR_INVALID_INPUT}\n`);
   }
 }

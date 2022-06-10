@@ -1,4 +1,4 @@
-import { Store } from "./store.js";
+import { Terminal } from "./terminal.js";
 import { parseUsername } from "./utils/parseUsername.js";
 import { exit, stdin } from "process";
 import {
@@ -9,22 +9,21 @@ import {
 } from "./constants.js";
 import { homedir } from "os";
 
-const store = new Store(homedir());
+const store = new Terminal(homedir());
 
 try {
   const username = parseUsername();
   store.username = username;
 
   store.writeWelcomeText();
-  store.writeDirectory();
 } catch (error) {
   store.writeInputError();
   exit();
 }
 
-stdin.on("data", async (data) => {
+stdin.on("data", (data) => {
   const [command, prop = ""] = data.toString().trim().split(" ");
-  // console.log(data.toString().trim().split(" "));
+
   switch (command) {
     case COMMAND_EXIT:
       store.writeFinishText();
@@ -32,17 +31,14 @@ stdin.on("data", async (data) => {
 
     case COMMAND_UP:
       store.goUp();
-      store.writeDirectory();
       break;
 
     case COMMAND_CD:
       store.changeDirectory(prop);
-      store.writeDirectory();
       break;
 
     case COMMAND_LIST:
-      await store.listDirectory();
-      store.writeDirectory();
+      store.listDirectory();
       break;
 
     default:
