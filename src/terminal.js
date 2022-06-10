@@ -1,7 +1,13 @@
 import { isAbsolute, join } from "path";
 import { chdir, cwd, stdout } from "process";
-import { ERROR_INVALID_INPUT, ERROR_OUTPUT } from "./constants.js";
+import { ERRORS } from "./constants.js";
+import { add } from "./utils/add.js";
+import { cat } from "./utils/cat.js";
+import { copy } from "./utils/copy.js";
+import { remove } from "./utils/remove.js";
 import { list } from "./utils/list.js";
+import { move } from "./utils/move.js";
+import { rn } from "./utils/rename.js";
 
 export class Terminal {
   username = "";
@@ -28,11 +34,11 @@ export class Terminal {
 
       this.writeDirectory();
     } catch (error) {
-      this.write(ERROR_OUTPUT);
+      this.write(ERRORS.OUTPUT);
     }
   }
 
-  async changeDirectory(path) {
+  changeDirectory(path) {
     const newPath = isAbsolute(path)
       ? join("/", path)
       : join(this.currentDirectoty, path);
@@ -42,7 +48,7 @@ export class Terminal {
 
       this.writeDirectory();
     } catch (error) {
-      this.write(ERROR_OUTPUT);
+      this.write(ERRORS.OUTPUT);
     }
   }
 
@@ -52,7 +58,77 @@ export class Terminal {
 
       this.writeDirectory();
     } catch (error) {
-      this.write(ERROR_OUTPUT);
+      this.write(ERRORS.OUTPUT);
+    }
+  }
+
+  async readFile(filePath) {
+    try {
+      const content = await cat(join(this.currentDirectoty, filePath));
+
+      this.write(content);
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERRORS.OUTPUT);
+    }
+  }
+
+  async addEmptyFile(fileName) {
+    try {
+      await add(join(this.currentDirectoty, fileName));
+
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERRORS.OUTPUT);
+    }
+  }
+
+  async renameFile(filePath, newFileName) {
+    try {
+      await rn(
+        join(this.currentDirectoty, filePath),
+        join(this.currentDirectoty, newFileName)
+      );
+
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERRORS.OUTPUT);
+    }
+  }
+
+  async copyFile(filePath, directory) {
+    try {
+      await copy(
+        join(this.currentDirectoty, filePath),
+        join(this.currentDirectoty, directory, filePath)
+      );
+
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERRORS.OUTPUT);
+    }
+  }
+
+  async moveFile(filePath, directory) {
+    try {
+      await move(
+        join(this.currentDirectoty, filePath),
+        join(this.currentDirectoty, directory, filePath)
+      );
+
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERRORS.OUTPUT);
+    }
+  }
+
+  async removeFile(filePath) {
+    try {
+      await remove(join(this.currentDirectoty, filePath));
+
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERRORS.OUTPUT);
     }
   }
 
@@ -70,10 +146,10 @@ export class Terminal {
   }
 
   writeDirectory() {
-    this.write(`You are currently in ${this.currentDirectoty}\n\n`);
+    this.write(`\nYou are currently in ${this.currentDirectoty}\n\n`);
   }
 
   writeInputError() {
-    this.write(`${ERROR_INVALID_INPUT}\n`);
+    this.write(ERRORS.INVALID_INPUT);
   }
 }

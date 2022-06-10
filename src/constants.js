@@ -1,7 +1,17 @@
-export const COMMAND_EXIT = ".exit";
-export const COMMAND_UP = "up";
-export const COMMAND_CD = "cd";
-export const COMMAND_LIST = "ls";
+export const COMMANDS = {
+  EXIT: ".exit",
+  UP: "up",
+  CD: "cd",
+  LIST: "ls",
+  CAT: "cat",
+  ADD: "add",
+  RN: "rn",
+  CP: "cp",
+  MV: "mv",
+  RM: "rm",
+};
 
-export const ERROR_INVALID_INPUT = "Invalid input\n";
-export const ERROR_OUTPUT = "Operation failed\n";
+export const ERRORS = {
+  INVALID_INPUT: "\nInvalid input\n\n",
+  OUTPUT: "\nOperation failed\n\n",
+};

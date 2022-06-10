@@ -1,53 +1,75 @@
 import { Terminal } from "./terminal.js";
 import { parseUsername } from "./utils/parseUsername.js";
 import { exit, stdin } from "process";
-import {
-  COMMAND_CD,
-  COMMAND_EXIT,
-  COMMAND_LIST,
-  COMMAND_UP,
-} from "./constants.js";
+import { COMMANDS } from "./constants.js";
 import { homedir } from "os";
 
-const store = new Terminal(homedir());
+const terminal = new Terminal(homedir());
 
 try {
   const username = parseUsername();
-  store.username = username;
+  terminal.username = username;
 
-  store.writeWelcomeText();
+  terminal.writeWelcomeText();
 } catch (error) {
-  store.writeInputError();
+  terminal.writeInputError();
   exit();
 }
 
 stdin.on("data", (data) => {
-  const [command, prop = ""] = data.toString().trim().split(" ");
+  const [command, propOne = "", propTwo = ""] = data
+    .toString()
+    .trim()
+    .split(" ");
 
   switch (command) {
-    case COMMAND_EXIT:
-      store.writeFinishText();
+    case COMMANDS.EXIT:
+      terminal.writeFinishText();
       exit();
 
-    case COMMAND_UP:
-      store.goUp();
+    case COMMANDS.UP:
+      terminal.goUp();
       break;
 
-    case COMMAND_CD:
-      store.changeDirectory(prop);
+    case COMMANDS.CD:
+      terminal.changeDirectory(propOne);
       break;
 
-    case COMMAND_LIST:
-      store.listDirectory();
+    case COMMANDS.LIST:
+      terminal.listDirectory();
+      break;
+
+    case COMMANDS.CAT:
+      terminal.readFile(propOne);
+      break;
+
+    case COMMANDS.ADD:
+      terminal.addEmptyFile(propOne);
+      break;
+
+    case COMMANDS.RN:
+      terminal.renameFile(propOne, propTwo);
+      break;
+
+    case COMMANDS.CP:
+      terminal.copyFile(propOne, propTwo);
+      break;
+
+    case COMMANDS.MV:
+      terminal.moveFile(propOne, propTwo);
+      break;
+
+    case COMMANDS.RM:
+      terminal.removeFile(propOne);
       break;
 
     default:
-      store.writeInputError();
+      terminal.writeInputError();
       break;
   }
 });
 
 process.on("SIGINT", () => {
-  store.writeFinishText();
+  terminal.writeFinishText();
   exit();
 });
