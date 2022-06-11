@@ -1,4 +1,4 @@
-import { isAbsolute, join, sep } from "path";
+import { isAbsolute, join, parse } from "path";
 import { chdir, cwd, stdout } from "process";
 import { ERRORS } from "./constants.js";
 import { add } from "./utils/add.js";
@@ -33,9 +33,7 @@ export class Terminal {
   }
 
   getFileNameFromPath(filePath) {
-    const pathArray = filePath.split(sep);
-
-    return pathArray[pathArray.length - 1];
+    return parse(filePath).base;
   }
 
   goUp() {

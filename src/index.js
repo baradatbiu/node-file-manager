@@ -17,10 +17,11 @@ try {
 }
 
 stdin.on("data", (data) => {
-  const [command, propOne = "", propTwo = ""] = data
+  const [command, propOne, propTwo] = data
     .toString()
     .trim()
-    .split(" ");
+    .match(/(?:[^\s"]+|"[^"]*")+/g)
+    .map((prop) => prop.replace(/"(.+)"/, "$1"));
 
   switch (command) {
     case COMMANDS.EXIT:
