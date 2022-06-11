@@ -1,4 +1,4 @@
-import { isAbsolute, join } from "path";
+import { isAbsolute, join, sep } from "path";
 import { chdir, cwd, stdout } from "process";
 import { ERRORS } from "./constants.js";
 import { add } from "./utils/add.js";
@@ -8,6 +8,10 @@ import { remove } from "./utils/remove.js";
 import { list } from "./utils/list.js";
 import { move } from "./utils/move.js";
 import { rn } from "./utils/rename.js";
+import { getOsInfo } from "./utils/getOsInfo.js";
+import { calculateHash } from "./utils/calcHash.js";
+import { compress } from "./utils/compress.js";
+import { decompress } from "./utils/decompress.js";
 
 export class Terminal {
   username = "";
@@ -26,6 +30,12 @@ export class Terminal {
 
   get currentDirectoty() {
     return cwd();
+  }
+
+  getFileNameFromPath(filePath) {
+    const pathArray = filePath.split(sep);
+
+    return pathArray[pathArray.length - 1];
   }
 
   goUp() {
@@ -100,7 +110,11 @@ export class Terminal {
     try {
       await copy(
         join(this.currentDirectoty, filePath),
-        join(this.currentDirectoty, directory, filePath)
+        join(
+          this.currentDirectoty,
+          directory,
+          this.getFileNameFromPath(filePath)
+        )
       );
 
       this.writeDirectory();
@@ -113,7 +127,11 @@ export class Terminal {
     try {
       await move(
         join(this.currentDirectoty, filePath),
-        join(this.currentDirectoty, directory, filePath)
+        join(
+          this.currentDirectoty,
+          directory,
+          this.getFileNameFromPath(filePath)
+        )
       );
 
       this.writeDirectory();
@@ -132,12 +150,74 @@ export class Terminal {
     }
   }
 
+  async showOsInfo(prop) {
+    const regex = new RegExp(/^--/);
+
+    try {
+      if (!regex.test(prop)) throw new Error();
+
+      const osInfoKey = prop.replace(regex, "");
+
+      const info = await getOsInfo(osInfoKey);
+
+      console.log(info);
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERRORS.OUTPUT);
+    }
+  }
+
+  async showFileHash(filePath) {
+    try {
+      const hash = await calculateHash(join(this.currentDirectoty, filePath));
+
+      this.write(`\n${hash}\n`);
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERRORS.OUTPUT);
+    }
+  }
+
+  async compressFile(filePath, destination) {
+    try {
+      await compress(
+        join(this.currentDirectoty, filePath),
+        join(
+          this.currentDirectoty,
+          destination,
+          this.getFileNameFromPath(filePath)
+        )
+      );
+
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERRORS.OUTPUT);
+    }
+  }
+
+  async decompressFile(filePath, destination) {
+    try {
+      await decompress(
+        join(this.currentDirectoty, filePath),
+        join(
+          this.currentDirectoty,
+          destination,
+          this.getFileNameFromPath(filePath)
+        )
+      );
+
+      this.writeDirectory();
+    } catch (error) {
+      this.write(ERRORS.OUTPUT);
+    }
+  }
+
   write(message) {
     stdout.write(message);
   }
 
   writeWelcomeText() {
-    this.write(`Welcome to the File Manager, ${this.username}!\n\n`);
+    this.write(`Welcome to the File Manager, ${this.username}!\n`);
     this.writeDirectory();
   }
 

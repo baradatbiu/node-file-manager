@@ -9,6 +9,18 @@ export const COMMANDS = {
   CP: "cp",
   MV: "mv",
   RM: "rm",
+  OS: "os",
+  HASH: "hash",
+  COMPRESS: "compress",
+  DECOMPRESS: "decompress",
+};
+
+export const OS_PROPS = {
+  EOL: "EOL",
+  CPUS: "cpus",
+  HOMEDIR: "homedir",
+  USERNAME: "username",
+  ARCHITECTURE: "architecture",
 };
 
 export const ERRORS = {

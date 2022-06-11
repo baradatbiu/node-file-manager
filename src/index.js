@@ -63,6 +63,22 @@ stdin.on("data", (data) => {
       terminal.removeFile(propOne);
       break;
 
+    case COMMANDS.OS:
+      terminal.showOsInfo(propOne);
+      break;
+
+    case COMMANDS.HASH:
+      terminal.showFileHash(propOne);
+      break;
+
+    case COMMANDS.COMPRESS:
+      terminal.compressFile(propOne, propTwo);
+      break;
+
+    case COMMANDS.DECOMPRESS:
+      terminal.decompressFile(propOne, propTwo);
+      break;
+
     default:
       terminal.writeInputError();
       break;
