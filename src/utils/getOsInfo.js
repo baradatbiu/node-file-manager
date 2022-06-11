@@ -7,7 +7,7 @@ export const getOsInfo = (osInfoKey) => {
       return JSON.stringify(EOL);
 
     case OS_PROPS.CPUS:
-      return cpus();
+      return cpus().map(({ model, speed }) => ({ model, speed }));
 
     case OS_PROPS.HOMEDIR:
       return homedir();
