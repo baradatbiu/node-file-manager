@@ -1,4 +1,4 @@
-import { COMMANDS, OS_PROPS } from "./constants";
+import { COMMANDS, OS_PROPS } from "./constants.js";
 
 export const commandHandler = (terminal, data) => {
   const [command, ...props] = data

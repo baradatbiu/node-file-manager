@@ -1,8 +1,8 @@
 import { Terminal } from "./terminal.js";
 import { parseUsername } from "./services/parseUsername.js";
+import { commandHandler } from "./commandHandler.js";
 import { exit, stdin } from "process";
 import { homedir } from "os";
-import { commandHandler } from "./commandHandler.js";
 
 const terminal = new Terminal(homedir());
 

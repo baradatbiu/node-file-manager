@@ -1,10 +1,10 @@
 import { isAbsolute, join, parse } from "path";
 import { chdir, cwd, stdout } from "process";
 import { ERRORS } from "./constants.js";
-import { add } from "./services/add.js.js";
-import { cat } from "./services/cat.js.js";
+import { add } from "./services/add.js";
+import { cat } from "./services/cat.js";
 import { copy } from "./services/copy.js";
-import { remove } from "./services/remove.js.js";
+import { remove } from "./services/remove.js";
 import { list } from "./services/list.js";
 import { move } from "./services/move.js";
 import { rn } from "./services/rename.js";
