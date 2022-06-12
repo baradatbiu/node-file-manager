@@ -1,17 +1,17 @@
 import { isAbsolute, join, parse } from "path";
 import { chdir, cwd, stdout } from "process";
 import { ERRORS } from "./constants.js";
-import { add } from "./utils/add.js";
-import { cat } from "./utils/cat.js";
-import { copy } from "./utils/copy.js";
-import { remove } from "./utils/remove.js";
-import { list } from "./utils/list.js";
-import { move } from "./utils/move.js";
-import { rn } from "./utils/rename.js";
-import { getOsInfo } from "./utils/getOsInfo.js";
-import { calculateHash } from "./utils/calcHash.js";
-import { compress } from "./utils/compress.js";
-import { decompress } from "./utils/decompress.js";
+import { add } from "./services/add.js.js";
+import { cat } from "./services/cat.js.js";
+import { copy } from "./services/copy.js";
+import { remove } from "./services/remove.js.js";
+import { list } from "./services/list.js";
+import { move } from "./services/move.js";
+import { rn } from "./services/rename.js";
+import { getOsInfo } from "./services/getOsInfo.js";
+import { calculateHash } from "./services/calcHash.js";
+import { compress } from "./services/compress.js";
+import { decompress } from "./services/decompress.js";
 
 export class Terminal {
   username = "";
@@ -148,14 +148,8 @@ export class Terminal {
     }
   }
 
-  async showOsInfo(prop) {
-    const regex = new RegExp(/^--/);
-
+  async showOsInfo(osInfoKey) {
     try {
-      if (!regex.test(prop)) throw new Error();
-
-      const osInfoKey = prop.replace(regex, "");
-
       const info = await getOsInfo(osInfoKey);
 
       console.log(info);
