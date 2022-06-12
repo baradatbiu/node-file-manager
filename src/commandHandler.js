@@ -64,14 +64,13 @@ export const commandHandler = (terminal, data) => {
         break;
 
       case COMMANDS.OS:
-        if (
-          props.length !== 1 ||
-          !Object.values(OS_PROPS).includes(`--${props[0]}`)
-        ) {
-          throw new Error();
-        }
+        if (props.length !== 1) throw new Error();
 
-        terminal.showOsInfo(props[0].slice(2));
+        const osInfoKey = props[0].slice(2);
+
+        if (!Object.values(OS_PROPS).includes(osInfoKey)) throw new Error();
+
+        terminal.showOsInfo(osInfoKey);
         break;
 
       case COMMANDS.HASH:
